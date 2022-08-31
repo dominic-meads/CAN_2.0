@@ -11,7 +11,7 @@ bosch specification: http://esd.cs.ucr.edu/webres/can20.pdf
 
 bool GEN_POLY[15] = {1,0,0,0,1,0,1,1,0,0,1,1,0,0,1}; // generator polynomial 0x4599
 // init boolean array 18 bits long -- SOF, Arbitration, Control, Data, (bitstream length only for standard identifier length) 
-int BITSTREAM_INDEX = 17;
+int BITSTREAM_INDEX = 25;
 bool BITSTREAM[26] = {0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1}; 
 bool CRC_REG[15] = {};  // init boolean array 15 bits long for CRC section of frame
 bool CRC_NXT = 0;
