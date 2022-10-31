@@ -21,12 +21,12 @@ int main()
 {   
     for(int i = BITSTREAM_INDEX; i > 0; i--)
     {
-        CRC_NXT = BITSTREAM[i] ^ CRC_REG[14];  // XOR
+        CRC_NXT = BITSTREAM[i] ^ CRC_REG[0];  // XOR
             
-            // left shift one
-            for(int j=14; j > 0; j--)
+            // right shift because of inverted arrays
+            for(int j = 14; j >0; j--)
             {
-                CRC_REG[j] = CRC_REG[j-1];
+                CRC_REG[j] = CRC_REG[j - 1];
             }
             CRC_REG[0] = 0; // insert zero at far right of array    
         
