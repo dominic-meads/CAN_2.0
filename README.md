@@ -7,3 +7,9 @@ Trying to port code (pg 13 ^) from Bosch Specification to C (no idea what origin
 
 CRC calculator
 https://leventozturk.com/engineering/crc/
+
+
+
+
+bool BITSTREAM[83] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,1,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0};
+
