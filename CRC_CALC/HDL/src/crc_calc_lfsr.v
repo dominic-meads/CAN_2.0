@@ -10,7 +10,7 @@ module crc(
 );
   
   // output registers
-  reg [14:0] r_crc = 15'hFFFF;  // must initialize with all 1's, otherwise a LFSR using XOR gates wont cycle.
+  reg [14:0] r_crc = 15'hFFFF;  // must be seeded with all 1's, otherwise a LFSR using XOR gates wont cycle. 
   reg r_crc_valid;
   
   always @ (posedge clk or negedge rst_n)
@@ -19,7 +19,7 @@ module crc(
         begin
           r_crc <= 15'hFFFF;
           r_crc_valid <= 1'b0;
-        end 
+        end  // if
       else 
         begin 
           // one-to-many Galois structure LFSR
@@ -38,4 +38,8 @@ module crc(
           r_crc[12] <= r_crc[11];
           r_crc[13] <= r_crc[12];
           r_crc[14] <= r_crc[13] ^ din;
+        end  // else
+    end  // always
+  
+endmodule
           
