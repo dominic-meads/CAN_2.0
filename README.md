@@ -3,7 +3,7 @@ CAN_2.0
 
 Bosch Specification: http://esd.cs.ucr.edu/webres/can20.pdf 
 
-CRC calculator
+CRC calculator/HDL code generator
 http://outputlogic.com/?page_id=321 I think this calculator is based on this paper: https://patentimages.storage.googleapis.com/23/eb/42/41726b420b55f1/US6295626.pdf
 
 Also https://docs.xilinx.com/v/u/en-US/xapp209 has good examples and descriptions of how CRCs are calculated, as well as modular arithmetic.
