@@ -16,11 +16,11 @@ I looked at CAN frames coming from my OBD2 port on my car. Below is one example,
 BITSTREAM FOR CAR
 
 SOF |  ARBITRATION | CONTROL |
- 0     000110000010   001000   
+0     000110000010   001000   
 
-                               DATA              
-   0100 0000 0000 0001 0000 1000 0111 0101 0000 0000 0000 0000 0000 0000 0000 0000  -- Bin
- 0x  4    0    0    1    0    8    7    5    0    0    0    0    0    0    0    0   -- Hex
+DATA              
+0100 0000 0000 0001 0000 1000 0111 0101 0000 0000 0000 0000 0000 0000 0000 0000  -- Bin
+ 4    0    0    1    0    8    7    5    0    0    0    0    0    0    0    0    -- Hex
                             
                             
 CRC = 101101101000000
