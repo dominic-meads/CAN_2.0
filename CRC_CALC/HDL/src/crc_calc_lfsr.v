@@ -13,6 +13,8 @@ module crc(
   reg [14:0] r_crc = 15'hFFFF;  // must be seeded with all 1's, otherwise a LFSR using XOR gates wont cycle. 
   reg r_crc_valid;
   
+  wire w_crc_nxt = din ^ r_crc[14];
+  
   always @ (posedge clk or negedge rst_n)
     begin 
       if (!rst_n)
@@ -23,25 +25,31 @@ module crc(
       else 
         begin 
           if (crc_en)
-            begin 
-              // one-to-many Galois structure LFSR
-              r_crc[0]  <= r_crc[14] ^ din;
-              r_crc[1]  <= r_crc[0];
-              r_crc[2]  <= r_crc[1];
-              r_crc[3]  <= r_crc[2] ^ din;
-              r_crc[4]  <= r_crc[3] ^ din;
-              r_crc[5]  <= r_crc[4];
-              r_crc[6]  <= r_crc[5];
-              r_crc[7]  <= r_crc[6] ^ din;
-              r_crc[8]  <= r_crc[7] ^ din;
-              r_crc[9]  <= r_crc[8];
-              r_crc[10] <= r_crc[9] ^ din;
-              r_crc[11] <= r_crc[10];
-              r_crc[12] <= r_crc[11];
-              r_crc[13] <= r_crc[12];
-              r_crc[14] <= r_crc[13] ^ din;
-            end // if
-          else 
+            begin
+              if (w_crc_nxt)
+                begin 
+                  // one-to-many Galois structure LFSR
+                  r_crc[0]  <= r_crc[14] ^ din;
+                  r_crc[1]  <= r_crc[0];
+                  r_crc[2]  <= r_crc[1];
+                  r_crc[3]  <= r_crc[2] ^ din;
+                  r_crc[4]  <= r_crc[3] ^ din;
+                  r_crc[5]  <= r_crc[4];
+                  r_crc[6]  <= r_crc[5];
+                  r_crc[7]  <= r_crc[6] ^ din;
+                  r_crc[8]  <= r_crc[7] ^ din;
+                  r_crc[9]  <= r_crc[8];
+                  r_crc[10] <= r_crc[9] ^ din;
+                  r_crc[11] <= r_crc[10];
+                  r_crc[12] <= r_crc[11];
+                  r_crc[13] <= r_crc[12];
+                  r_crc[14] <= r_crc[13] ^ din;
+                end // if
+              else 
+                begin 
+                  r_crc <= r_crc << 1;
+                end // else 
+           else 
             begin
               r_crc <= 15'hFFFF;
             end // else 
