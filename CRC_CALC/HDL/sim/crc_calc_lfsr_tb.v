@@ -18,7 +18,6 @@ module tb();
   reg [92:0] r_bitstream;
   
   integer i;  // for loop to ship out bitstream
-  integer last_time = 4000;  // time for last bit in bitstream
   
   initial
     begin 
@@ -26,7 +25,7 @@ module tb();
       $dumpvars(0,uut);
       clk = 0;
       rst_n = 0;
-      en = 0;
+      crc_en = 0;
       din = 0;
       r_bitstream = {r_idle, r_can_rx};  // put idle time in front
       #10
@@ -40,8 +39,9 @@ module tb();
               crc_en = 1;
             end 
           #1000  // only ship one bit per clock cycle
-        end 
-      #last_time
+        end
+      crc_en = 0; // no more bits in bitstream, stop LFSR
+      #2000
       $finish;
     end
 endmodule 
