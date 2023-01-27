@@ -10,7 +10,7 @@ module crc(
 );
   
   // output registers
-  reg [14:0] r_crc = 15'hFFFF;  // must be seeded with all 1's, otherwise a LFSR using XOR gates wont cycle. 
+  reg [14:0] r_crc = 15'h0000;
   reg r_crc_valid;
   
   wire w_crc_nxt = din ^ r_crc[14];
@@ -19,7 +19,7 @@ module crc(
     begin 
       if (!rst_n)
         begin
-          r_crc <= 15'hFFFF;
+          r_crc <= 15'h0000;
           r_crc_valid <= 1'b0;
         end  // if
       else 
@@ -29,29 +29,30 @@ module crc(
               if (w_crc_nxt)
                 begin 
                   // one-to-many Galois structure LFSR
-                  r_crc[0]  <= r_crc[14] ^ din;
+                  r_crc[0]  <= 1;
                   r_crc[1]  <= r_crc[0];
                   r_crc[2]  <= r_crc[1];
-                  r_crc[3]  <= r_crc[2] ^ din;
-                  r_crc[4]  <= r_crc[3] ^ din;
+                  r_crc[3]  <= r_crc[2] ^ 1'b1;
+                  r_crc[4]  <= r_crc[3] ^ 1'b1;
                   r_crc[5]  <= r_crc[4];
                   r_crc[6]  <= r_crc[5];
-                  r_crc[7]  <= r_crc[6] ^ din;
-                  r_crc[8]  <= r_crc[7] ^ din;
+                  r_crc[7]  <= r_crc[6] ^ 1'b1;
+                  r_crc[8]  <= r_crc[7] ^ 1'b1;
                   r_crc[9]  <= r_crc[8];
-                  r_crc[10] <= r_crc[9] ^ din;
+                  r_crc[10] <= r_crc[9] ^ 1'b1;
                   r_crc[11] <= r_crc[10];
                   r_crc[12] <= r_crc[11];
                   r_crc[13] <= r_crc[12];
-                  r_crc[14] <= r_crc[13] ^ din;
+                  r_crc[14] <= r_crc[13] ^ 1'b1;
                 end // if
               else 
                 begin 
                   r_crc <= r_crc << 1;
-                end // else 
+                end // else
+            end // if
            else 
             begin
-              r_crc <= 15'hFFFF;
+              r_crc <= 15'h0000;
             end // else 
         end  // else
     end  // always
