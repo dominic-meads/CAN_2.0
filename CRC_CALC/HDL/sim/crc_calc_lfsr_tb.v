@@ -14,7 +14,8 @@ module tb();
   crc uut (clk, rst_n, din, crc_en, crc, crc_valid);
   
   reg [9:0] r_idle = 10'hfff;  // IDLE time at end of frame
-  reg [82:0] r_can_rx = 83'b00001100000100010000100000000000001000010000111010100000000000000000000000000000000;  // add extra one to see where data ends
+  //reg [82:0] r_can_rx = 83'b00001100000100010000100000000000001000010000111010100000000000000000000000000000000;  
+  reg [83:0] r_can_rx = 83'b00001100010100010000001000000000000000000000000000000010000000000000000000000000000;
   reg [92:0] r_bitstream;
   
   integer i;  // for loop to ship out bitstream
@@ -44,4 +45,4 @@ module tb();
       #2000
       $finish;
     end
-endmodule 
+endmodule  
