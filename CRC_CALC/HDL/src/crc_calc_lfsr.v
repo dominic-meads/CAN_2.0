@@ -15,7 +15,7 @@ module crc(
   
   always @ (posedge clk or negedge rst_n)
     begin 
-      if (rst_n)
+      if (!rst_n)
         begin
           r_crc <= 15'hFFFF;
           r_crc_valid <= 1'b0;
