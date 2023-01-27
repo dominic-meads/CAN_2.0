@@ -38,7 +38,7 @@ module tb();
             begin 
               crc_en = 1;
             end 
-          #1000  // only ship one bit per clock cycle
+          #1000;  // only ship one bit per clock cycle
         end
       crc_en = 0; // no more bits in bitstream, stop LFSR
       #2000
