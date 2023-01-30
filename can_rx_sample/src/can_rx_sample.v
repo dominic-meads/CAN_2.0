@@ -77,4 +77,4 @@ module can_rx_sample
       
   assign dout = r_dout;
       
-endmodule
+endmodule  // can_rx_sample
