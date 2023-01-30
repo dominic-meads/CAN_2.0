@@ -32,8 +32,6 @@ module crc_calc(
   
   reg [14:0] r_crc = 15'h0000;
   
-  wire w_crc_nxt = din ^ r_crc[14];
-  
   always @ (posedge clk or negedge rst_n)
     begin 
       if (!rst_n)
@@ -44,29 +42,22 @@ module crc_calc(
         begin 
           if (crc_en)
             begin
-              if (w_crc_nxt)
-                begin 
-                  // This block performs the shift and the XOR with 0x4599 at the same time. 
-                  r_crc[0]  <= 1'b1;  // in the Bosch specification, after the shift, this bit is set to 0, but then XORed with 1. 0 ^ 1 = 1
-                  r_crc[1]  <= r_crc[0];
-                  r_crc[2]  <= r_crc[1];
-                  r_crc[3]  <= r_crc[2] ^ 1'b1;
-                  r_crc[4]  <= r_crc[3] ^ 1'b1;
-                  r_crc[5]  <= r_crc[4];
-                  r_crc[6]  <= r_crc[5];
-                  r_crc[7]  <= r_crc[6] ^ 1'b1;
-                  r_crc[8]  <= r_crc[7] ^ 1'b1;
-                  r_crc[9]  <= r_crc[8];
-                  r_crc[10] <= r_crc[9] ^ 1'b1;
-                  r_crc[11] <= r_crc[10];
-                  r_crc[12] <= r_crc[11];
-                  r_crc[13] <= r_crc[12];
-                  r_crc[14] <= r_crc[13] ^ 1'b1;
-                end // if (w_crc_nxt)
-              else 
-                begin 
-                  r_crc <= r_crc << 1; 
-                end // else
+              // one-to-many Galois structure LFSR 
+              r_crc[0]  <= r_crc[14] ^ din; 
+              r_crc[1]  <= r_crc[0];
+              r_crc[2]  <= r_crc[1];
+              r_crc[3]  <= r_crc[2] ^ r_crc[14] ^ din;
+              r_crc[4]  <= r_crc[3] ^ r_crc[14] ^ din;
+              r_crc[5]  <= r_crc[4];
+              r_crc[6]  <= r_crc[5];
+              r_crc[7]  <= r_crc[6] ^ r_crc[14] ^ din;
+              r_crc[8]  <= r_crc[7] ^ r_crc[14] ^ din;
+              r_crc[9]  <= r_crc[8];
+              r_crc[10] <= r_crc[9] ^ r_crc[14] ^ din;
+              r_crc[11] <= r_crc[10];
+              r_crc[12] <= r_crc[11];
+              r_crc[13] <= r_crc[12];
+              r_crc[14] <= r_crc[13] ^ r_crc[14] ^ din;
             end // if (crc_en)
            else 
             begin
