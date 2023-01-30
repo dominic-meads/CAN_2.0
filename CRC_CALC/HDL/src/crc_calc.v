@@ -20,9 +20,6 @@
 // Revision 0.01 - File Created
 // Additional Comments:                    
 //////////////////////////////////////////////////////////////////////////////////
-
-
-
 `timescale 1 ns / 1 ps
 
 module crc_calc(
