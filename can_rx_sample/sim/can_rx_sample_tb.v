@@ -55,4 +55,4 @@ module tb();
       #bit_time;
       $finish;
     end 
-endmodule
+endmodule  // tb
