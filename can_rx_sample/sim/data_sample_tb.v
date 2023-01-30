@@ -8,7 +8,7 @@
 // Project Name: CAN_2.0
 // Target Devices: 
 // Tool Versions: 
-// Description: Verifies module can_rx_sample. Acts as CAN tx, transmitting bits @ 1 Mb/s
+// Description: Verifies module data_sample. Acts as CAN tx, transmitting bits @ 1 Mb/s
 //                    
 // Dependencies: 
 // 
