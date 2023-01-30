@@ -4,7 +4,7 @@
 // 
 // Create Date: 01/30/2023 
 // Design Name: 
-// Module Name: can_rx_sample
+// Module Name: data_sample
 // Project Name: CAN_2.0
 // Target Devices: 
 // Tool Versions: 
@@ -77,4 +77,4 @@ module can_rx_sample
       
   assign dout = r_dout;
       
-endmodule  // can_rx_sample
+endmodule  // data_sample
