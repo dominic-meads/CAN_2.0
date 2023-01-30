@@ -27,7 +27,7 @@ module crc_calc(
   input rst_n,        // active low rst
   input din,          // serial bistream in
   input crc_en,       // If high, start crc calculation (waits for SOF)
-  output [14:0] crc,  // crc output
+  output [14:0] crc   // crc output
 );
   
   reg [14:0] r_crc = 15'h0000;
