@@ -8,11 +8,11 @@
 // Project Name: CAN_2.0
 // Target Devices: 
 // Tool Versions: 
-// Description: Performs a CRC calculation as described in the Bosch CAN 2.0 specification.
-//              (Pgs. 13-14 http://esd.cs.ucr.edu/webres/can20.pdf)
-//
-//              Generator polynomial for CAN 2.0: 
+// Description: Performs a CRC calculation with a LFSR given the Generator polynomial for CAN 2.0: 
 //              x^15 + x^14 + x^10 + x^8 + x^7 + x^4 + x^3 + 1
+//
+//              CAN 2.0 CRC calculation
+//              (Pg. 13 http://esd.cs.ucr.edu/webres/can20.pdf)
 //                    
 // Dependencies: 
 // 
@@ -42,7 +42,7 @@ module crc_calc(
         begin 
           if (crc_en)
             begin
-              // one-to-many Galois structure LFSR 
+              // one-to-many Galois structure LFSR with taps at generator polynomial coefficients
               r_crc[0]  <= r_crc[14] ^ din; 
               r_crc[1]  <= r_crc[0];
               r_crc[2]  <= r_crc[1];
