@@ -22,6 +22,8 @@
 //              a frame. This module looks for those 11 bits, and once they have been 
 //              transmitted, it looks for the first dominant bit, indicating the start 
 //              of another frame (SOF)
+//
+//              More info on overload/error frames: https://www.embeddedc.in/p/can-basics3.html
 //                    
 // Dependencies: 100 MHz clock, 1 Mb/s data rate
 // 
