@@ -122,10 +122,7 @@ module frame_detect#(
         end  // else 
     end  // always
   
-    
-              
-          
-  
+    assign sof_detect = r_sof_detect;
   
 endmodule  // frame_detect
   
