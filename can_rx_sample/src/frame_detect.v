@@ -35,7 +35,7 @@
 
 module frame_detect#(
   parameter clk_speed_MHz = 100,
-  parameter can_bit_rate_KHz = 1000
+  parameter can_bit_rate_Kbits = 1000
 )(
   input clk,         // 100 MHz system clk
   input rst_n,
@@ -62,7 +62,7 @@ module frame_detect#(
         begin 
           if (can_rx)  // start counter everytime a recessive level is read
             begin
-              if (r_frame_end_time < ((clk_speed_MHz * 1000) / can_bit_rate_Kbits)*11))  // if less than max time value
+              if (r_frame_end_time < ((clk_speed_MHz * 1000) / (can_bit_rate_Kbits))*11)  // if less than max time value
                 begin 
                   r_frame_end_time <= r_frame_end_time + 1;  // count up
                 end  // if (r_frame_end...
