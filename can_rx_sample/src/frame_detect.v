@@ -44,7 +44,7 @@ module frame_detect#(
 ); 
   
   // counter register to keep track of clk cycles per 11 recessive bits sent on the can line
-  reg [$clog2(((clk_speed_MHz * 1000) / can_bit_rate_Kbits)*11)-1:0] r_frame_end_time = 0;
+  reg [$clog2(((clk_speed_MHz * 10000) / can_bit_rate_Kbits)*11)-1:0] r_frame_end_time = 0;
   
   // edge detection registers
   reg r_sof_detect = 1'b0;
@@ -62,7 +62,7 @@ module frame_detect#(
         begin 
           if (can_rx)  // start counter everytime a recessive level is read
             begin
-              if (r_frame_end_time < ((clk_speed_MHz * 1000) / (can_bit_rate_Kbits))*11)  // if less than max time value
+              if (r_frame_end_time < ((clk_speed_MHz * 10000) / (can_bit_rate_Kbits))*11)  // if less than max time value
                 begin 
                   r_frame_end_time <= r_frame_end_time + 1;  // count up
                 end  // if (r_frame_end...
@@ -103,8 +103,8 @@ module frame_detect#(
       else 
         begin 
           // After the counter counts for 10 consective recessive bits, count halfway through the 11th recessive bit, then look for the falling edge on the bus
-          //                         |-------- time for 10 recessive bits -----------|   |----- half of another recessive bit period ----|
-          if (r_frame_end_time >= (  (((clk_speed_MHz * 1000) / can_bit_rate_Kbits)*10) + ((clk_speed_MHz * 1000) / (2*can_bit_rate_Kbits))  )) 
+          //                         |-------- time for 10 recessive bits -------------|   |----- half of another recessive bit period -----|
+          if (r_frame_end_time >= (  (((clk_speed_MHz * 10000) / can_bit_rate_Kbits)*10) + ((clk_speed_MHz * 10000) / (2*can_bit_rate_Kbits))  )) 
             begin
               if (!can_rx && r_sof_temp)  // can_rx is now low, but previous state was high, transition to dominant has occurred, this is the start of frame.
                 begin
