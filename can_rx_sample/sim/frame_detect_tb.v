@@ -46,7 +46,7 @@ module tb();
         clk = 1'b0;
         rst_n = 1'b0;
         can_rx = 1'b1; 
-        bit_period = (clk_speed_MHz * 1000) / can_bit_rate_Kbits;
+        bit_period = (clk_speed_MHz * 10000) / can_bit_rate_Kbits;
       #10
         rst_n = 1'b1;  // release rst
       #20
