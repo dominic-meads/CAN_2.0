@@ -26,7 +26,7 @@ module tb();
   
   always #5 clk = ~clk;  // 100 MHz FPGA system clock
   
-  frame_detect uut (clk, rst_n, can_rx, sof_detect);
+  frame_detect #(100, 1000) uut (clk, rst_n, can_rx, sof_detect);
   
   // Data test frames
   reg [93:0] r_can_frame_1_data = 94'b0000110000010001000010000000000000100001000011101010000000000000000000000000000000011111111111;  
@@ -46,7 +46,7 @@ module tb();
         clk = 1'b0;
         rst_n = 1'b0;
         can_rx = 1'b1; 
-        bit_period = (clk_speed_MHz * 1000) / can_bit_rate_Kbits);
+        bit_period = (clk_speed_MHz * 1000) / can_bit_rate_Kbits;
       #10
         rst_n = 1'b1;  // release rst
       #20
