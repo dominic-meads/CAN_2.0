@@ -42,7 +42,7 @@ module can_rx_sample
   // counter and output registers
   reg [$clog2((clk_speed_MHz * 1000) / can_bit_rate_Kbits)-1:0] r_clks_per_bit_counter = 0;
   reg r_dout = 1'b0;
-  reg r_dvaild = 1'b0;
+  reg r_dvalid = 1'b0;
   
   // present state logic
   always @ (posedge clk or negedge rst_n)
@@ -123,6 +123,6 @@ module can_rx_sample
     end  // always
       
   assign dout = r_dout;
-  assign dvaild = r_dvalid; 
+  assign dvalid = r_dvalid; 
       
 endmodule  // data_sample
