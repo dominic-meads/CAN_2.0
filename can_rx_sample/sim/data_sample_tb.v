@@ -32,7 +32,7 @@ module tb();
   integer i;  // int for the loop to ship out bitstream
   integer clk_speed_MHz = 100;
   integer can_bit_rate_Kbits = 1000;
-  integer bit_period;
+  integer bit_period_ns;
   
   // example frame
   reg [82:0] r_can_frame_1_data = 83'b00001100000100010000100000000000001000010000111010100000000000000000000000000000000; 
