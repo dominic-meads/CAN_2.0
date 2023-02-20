@@ -25,12 +25,19 @@ module tb();
   reg en;
   reg din;
   wire dout;
+  wire dvalid;
   
   always #5 clk = ~clk;  // 100 MHz
   
-  integer bit_time = 1000;  // 1000 ns or 1 Mb/s
+  integer i;  // int for the loop to ship out bitstream
+  integer clk_speed_MHz = 100;
+  integer can_bit_rate_Kbits = 1000;
+  integer bit_period;
   
-  can_rx_sample #(100, 1000) uut (clk, rst_n, en, din, dout);
+  // example frame
+  reg [82:0] r_can_frame_1_data = 83'b00001100000100010000100000000000001000010000111010100000000000000000000000000000000; 
+  
+  can_rx_sample #(100, 1000) uut (clk, rst_n, en, din, dout, dvalid);
   
   initial 
     begin 
@@ -39,20 +46,21 @@ module tb();
         clk = 0;
         rst_n = 0;
         en = 0;
+      bit_period = (clk_speed_MHz * 10000) / can_bit_rate_Kbits;
       #20
         rst_n = 1;  // release rst_n
       #20
-        en = 1;
-        din = 1;
-      #bit_time
-        din = 0;  // SOF
-      #bit_time 
-        din = 1;
-      #bit_time
-        din = 0;
-      #bit_time
-        din = 0;
-      #bit_time;
+      en = 1;  // simulate SOF
+      // send data frame
+      for(i = 82; i >= 0; i=i-1)  
+          begin 
+            din = r_can_frame_1_data[i];
+            #bit_period;
+          end
+      en = 0;  // start of CRC, disable data sampling
+      #1000
+      en = 1;  // see if state machine resets
+      #1000
       $finish;
     end 
 endmodule  // tb
