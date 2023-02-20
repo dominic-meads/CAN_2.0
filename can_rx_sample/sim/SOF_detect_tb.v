@@ -26,7 +26,7 @@ module tb();
   
   always #5 clk = ~clk;  // 100 MHz FPGA system clock
   
-  frame_detect #(100, 1000) uut (clk, rst_n, can_rx, sof_detect);
+  SOF_detect #(100, 1000) uut (clk, rst_n, can_rx, sof_detect);
   
   // Data test frames
   reg [108:0] r_can_frame_1_data = 109'b0000110000010001000010000000000000100001000011101010000000000000000000000000000000010110110100000011111111111;  
