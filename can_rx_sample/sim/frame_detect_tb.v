@@ -37,7 +37,7 @@ module tb();
   integer i;  // int for the loop to ship out bitstream
   integer clk_speed_MHz = 100;
   integer can_bit_rate_Kbits = 1000;
-  integer bit_period;
+  integer bit_period_ns;
                        
   initial
     begin 
