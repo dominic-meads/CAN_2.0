@@ -46,7 +46,7 @@ module tb();
         clk = 0;
         rst_n = 0;
         en = 0;
-      bit_period = (clk_speed_MHz * 10000) / can_bit_rate_Kbits;
+      bit_period_ns = ((clk_speed_MHz * 1000) / can_bit_rate_Kbits) * 10;
       #20
         rst_n = 1;  // release rst_n
       #20
@@ -55,7 +55,7 @@ module tb();
       for(i = 82; i >= 0; i=i-1)  
           begin 
             din = r_can_frame_1_data[i];
-            #bit_period;
+            #bit_period_ns;
           end
       en = 0;  // start of CRC, disable data sampling
       #1000
