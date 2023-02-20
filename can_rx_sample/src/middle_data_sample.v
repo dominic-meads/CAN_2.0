@@ -9,8 +9,6 @@
 // Target Devices: 
 // Tool Versions: 
 // Description: responsible for sampling the incoming bit in the middle of its period. 
-//              This is when it is most stable. Sampling is enabled by the SOF flag, 
-//              and continued until the CRC field is received. CRC is sampled to verify.
 //                    
 // Dependencies: 100 MHz clock, 1 Mb/s data rate
 // 
