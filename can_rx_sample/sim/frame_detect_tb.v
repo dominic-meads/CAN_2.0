@@ -29,8 +29,8 @@ module tb();
   frame_detect #(100, 1000) uut (clk, rst_n, can_rx, sof_detect);
   
   // Data test frames
-  reg [93:0] r_can_frame_1_data = 94'b0000110000010001000010000000000000100001000011101010000000000000000000000000000000011111111111;  
-  reg [93:0] r_can_frame_2_data = 94'b0000110001010001000000100000000000000000000000000000001000000000000000000000000000011111111111;
+  reg [108:0] r_can_frame_1_data = 109'b0000110000010001000010000000000000100001000011101010000000000000000000000000000000010110110100000011111111111;  
+  reg [108:0] r_can_frame_2_data = 109'b0000110001010001000000100000000000000000000000000000001000000000000000000000000000001101110001000111111111111;
   // Error test frame with IFS appended at end
   reg [83:0] r_can_frame_3_error = 84'b000011000101000100000010000000000000000000000000000000100000000000000000011111111111;
   
@@ -51,7 +51,7 @@ module tb();
         rst_n = 1'b1;  // release rst
       #20
       // send first data frame
-        for(i = 93; i >= 0; i=i-1)  
+      for(i = 108; i >= 0; i=i-1)  
           begin 
             can_rx = r_can_frame_1_data[i];
             #bit_period_ns;
@@ -67,7 +67,7 @@ module tb();
         can_rx = 1'b1;
       #500
         // send second data frame
-        for(i = 93; i >= 0; i=i-1)  
+      for(i = 108; i >= 0; i=i-1)  
           begin 
             can_rx = r_can_frame_2_data[i];
             #bit_period_ns;
