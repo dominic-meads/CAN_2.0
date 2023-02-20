@@ -4,13 +4,13 @@
 // 
 // Create Date: 01/30/2023 
 // Design Name: 
-// Module Name: data_sample
+// Module Name: middle_data_sample
 // Project Name: CAN_2.0
 // Target Devices: 
 // Tool Versions: 
-// Description: Samples the incoming bitstream on the CAN lines. Sampling is enabled
-//              by the SOF flag, and continued until the CRC field is received. CRC
-//              is sampled to verify.
+// Description: responsible for sampling the incoming bit in the middle of its period. 
+//              This is when it is most stable. Sampling is enabled by the SOF flag, 
+//              and continued until the CRC field is received. CRC is sampled to verify.
 //                    
 // Dependencies: 100 MHz clock, 1 Mb/s data rate
 // 
@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 `timescale 1ns / 1ps
 
-module can_rx_sample
+module middle_data_sample
   #(parameter clk_speed_MHz = 100,        // system clock on FPGA board
     parameter can_bit_rate_Kbits = 1000)  // CAN speed on my vehicle
   (
@@ -144,4 +144,4 @@ module can_rx_sample
   assign dout = r_dout;
   assign dvalid = r_dvalid; 
       
-endmodule  // data_sample
+endmodule  // middle_data_sample
