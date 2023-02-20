@@ -35,7 +35,7 @@ module tb();
   integer bit_period_ns;
   
   // example frame
-  reg [82:0] r_can_frame_1_data = 83'b00001100000100010000100000000000001000010000111010100000000000000000000000000000000; 
+  reg [97:0] r_can_frame_1_data = 98'b00001100000100010000100000000000001000010000111010100000000000000000000000000000000101101101000000; 
   
   can_rx_sample #(100, 1000) uut (clk, rst_n, en, din, dout, dvalid);
   
@@ -52,7 +52,7 @@ module tb();
       #20
       en = 1;  // simulate SOF
       // send data frame
-      for(i = 82; i >= 0; i=i-1)  
+      for(i = 97; i >= 0; i=i-1)  
           begin 
             din = r_can_frame_1_data[i];
             #bit_period_ns;
