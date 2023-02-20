@@ -4,11 +4,11 @@
 // 
 // Create Date: 01/30/2023 
 // Design Name: 
-// Module Name: frame_detect
+// Module Name: SOF_detect
 // Project Name: CAN_2.0
 // Target Devices: 
 // Tool Versions: 
-// Description: Determines the SOF, then enables the data_sample module to 
+// Description: Determines the SOF, then enables the middle_data_sample module to 
 //              start registering the data. 
 //        
 //              On Data and Remote frames, End Of Frame (EOF) and 
@@ -33,7 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 `timescale 1 ns / 1 ps
 
-module frame_detect#(
+module SOF_detect#(
   parameter clk_speed_MHz = 100,
   parameter can_bit_rate_Kbits = 1000
 )(
@@ -120,5 +120,5 @@ module frame_detect#(
   
     assign sof_detect = r_sof_detect;
   
-endmodule  // frame_detect
+endmodule  // SOF_detect
   
