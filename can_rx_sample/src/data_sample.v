@@ -9,7 +9,8 @@
 // Target Devices: 
 // Tool Versions: 
 // Description: Samples the incoming bitstream on the CAN lines. Sampling is enabled
-//              by the SOF flag, and continued until frame has reached the CRC field.
+//              by the SOF flag, and continued until the CRC field is received. CRC
+//              is sampled to verify.
 //                    
 // Dependencies: 100 MHz clock, 1 Mb/s data rate
 // 
@@ -25,7 +26,7 @@ module can_rx_sample
   (
   input clk,     // 100 MHz
   input rst_n,   // active low
-  input en,      // active at SOF until CRC field
+  input en,      // active at SOF until CRC deliminator
   input din,     // rx in
   output dout,   // registered data out to other modules
   output dvalid  // data valid  
