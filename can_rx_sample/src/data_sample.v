@@ -110,13 +110,27 @@ module can_rx_sample
       if(!rst_n)
         begin 
           r_dout <= 1'b0;
-          r_dvalid <= 1'b0;
         end  // (!rst_n)
       else 
         begin 
           if (r_clks_per_bit_counter == ((clk_speed_MHz * 1000) / can_bit_rate_Kbits)/2 - 1) 
             begin
               r_dout <= din;  // sample data at halfway point during bit period
+            end  // if (r_clk_per...
+        end  // else
+    end  // always
+  
+  // toggle r_davlid 
+  always @ (posedge clk or negedge rst_n)
+    begin 
+      if(!rst_n)
+        begin 
+          r_dvalid <= 1'b0;
+        end  // (!rst_n)
+      else 
+        begin 
+          if (r_clks_per_bit_counter == ((clk_speed_MHz * 1000) / can_bit_rate_Kbits)/2)  // wait one clock cycle after data is sampled, then toggle r_dvalid
+            begin
               r_dvalid <= 1'b1;  // only pulse r_dvalid if halfway between bits
             end  // if (r_clk_per...
           else 
