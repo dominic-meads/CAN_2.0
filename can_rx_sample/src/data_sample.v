@@ -123,6 +123,6 @@ module can_rx_sample
     end  // always
       
   assign dout = r_dout;
-  assign 
+  assign dvaild = r_dvalid; 
       
 endmodule  // data_sample
