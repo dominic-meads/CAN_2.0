@@ -8,7 +8,7 @@
 // Project Name: CAN_2.0
 // Target Devices: 
 // Tool Versions: 
-// Description: Verifies module data_sample. Acts as CAN tx, transmitting bits @ 1 Mb/s
+// Description: Verifies module middle_data_sample. Acts as CAN tx, transmitting bits @ 1 Mb/s
 //                    
 // Dependencies: 
 // 
@@ -37,7 +37,7 @@ module tb();
   // example frame
   reg [97:0] r_can_frame_1_data = 98'b00001100000100010000100000000000001000010000111010100000000000000000000000000000000101101101000000; 
   
-  can_rx_sample #(100, 1000) uut (clk, rst_n, en, din, dout, dvalid);
+  middle_data_sample #(100, 1000) uut (clk, rst_n, en, din, dout, dvalid);
   
   initial 
     begin 
