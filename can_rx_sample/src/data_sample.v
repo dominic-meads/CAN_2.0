@@ -9,7 +9,7 @@
 // Target Devices: 
 // Tool Versions: 
 // Description: Samples the incoming bitstream on the CAN lines. Sampling is enabled
-//              by the SOF flag.
+//              by the SOF flag, and continued until frame has reached the CRC field.
 //                    
 // Dependencies: 100 MHz clock, 1 Mb/s data rate
 // 
@@ -25,7 +25,7 @@ module can_rx_sample
   (
   input clk,     // 100 MHz
   input rst_n,   // active low
-  input en,      // active at SOF
+  input en,      // active at SOF until CRC field
   input din,     // rx in
   output dout,   // registered data out to other modules
   output dvalid  // data valid  
@@ -59,9 +59,23 @@ module can_rx_sample
   
   // next state logic
   always @ (r_present_state, en)
-    begin
-      r_next_state = IDLE; 
-      case (r_present_state);
+    begin 
+      case (r_present_state)
+        IDLE : begin 
+                 if (en) 
+                    begin 
+                      r_next_state = SAMPLE;
+                    end  // if (en)
+               end  // IDLE
+        SAMPLE : begin 
+                   if (!en) 
+                     begin 
+                       r_next_state = IDLE;
+                     end  // if (!en)
+                 end  // SAMPLE
+        default : r_next_state = IDLE;
+      endcase 
+    end  // always 
       
   // implement up counter
   always @ (posedge clk or negedge rst_n)
@@ -72,7 +86,7 @@ module can_rx_sample
         end  // if (!rst_n)
       else
         begin 
-          if (en) 
+          if (r_next_state == SAMPLE) 
             begin 
               if (r_clks_per_bit_counter < ((clk_speed_MHz * 1000) / can_bit_rate_Kbits) - 1)
                 begin
