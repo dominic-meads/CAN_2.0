@@ -100,7 +100,7 @@ module frame_length_calc #(
     end  // always 
   
   // next state logic
-  always @ (r_present_state, r_frame_length_bits, sof, )
+    always @ (r_present_state, r_frame_length_bits, r_max_bits, sof, r_rtr_ssr)
     begin 
       case (r_present_state)
         
@@ -114,7 +114,7 @@ module frame_length_calc #(
         RTR_SSR : begin 
           if (r_frame_length_bits == 12)
             begin
-              r_rtr_ssr = din;     // register for later
+ //             r_rtr_ssr = din;     // register for later
               r_next_state = IDE;
             end  // if (r_frame_length...
         end  // RTS_SSR
@@ -135,7 +135,21 @@ module frame_length_calc #(
         
         STD : begin 
           if (r_rtr_ssr)  // this bit in the standard frame format determines if the frame is data or remote
-            begin
+            begin  // remote frame
+              r_next_state = REMOTE_STD;
+            end  // if (rtr_ssr)
+          else 
+            begin  // data frame
+              r_next_state = DATA_STD;
+            end  // else
+        end  // STD
+          
+        REMOTE_STD : begin 
+            if (r_frame_length_bits == r_max_bits)
+            
+               
+              
+                
               
               
          
