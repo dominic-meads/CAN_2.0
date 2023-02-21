@@ -44,13 +44,11 @@ module frame_length_calc #(
   parameter STD = 4'b0011;
   parameter DATA_STD = 4'b0100;
   parameter REMOTE_STD = 4'b0101;
-  parameter IFS_STD = 4'b0110;
   
   // states for extended length identifier
   parameter RTR_EXT = 4'b0111;
   parameter DATA_EXT = 4'b1000;
   parameter REMOTE_EXT = 4'b1001;
-  parameter IFS_EXT = 4'b1010;
   
   // state registers
   reg r_present_state;
@@ -104,14 +102,14 @@ module frame_length_calc #(
     begin 
       case (r_present_state)
         
-        IDLE : begin 
+        IDLE : begin  // looks for SOF
           if (sof) 
             begin 
               r_next_state = RTR_SSR;
             end  // if (sof)
         end  // IDLE
         
-        RTR_SSR : begin 
+        RTR_SSR : begin  // state to register the RTR/SSR bit for later use
           if (r_frame_length_bits == 12)
             begin
  //             r_rtr_ssr = din;     // register for later
@@ -119,7 +117,7 @@ module frame_length_calc #(
             end  // if (r_frame_length...
         end  // RTS_SSR
         
-        IDE : begin 
+        IDE : begin  // Determines if the frame is extended or standard 
           if (r_frame_length_bits == 13)
             begin
               if (din)  // The frame has an extended ID
@@ -144,8 +142,55 @@ module frame_length_calc #(
             end  // else
         end  // STD
           
-        REMOTE_STD : begin 
-            if (r_frame_length_bits == r_max_bits)
+        REMOTE_STD : begin  // no data in this frame, but still waits for all the bits to go back to IDLE
+          if (r_frame_length_bits == r_max_bits)
+            begin 
+              r_next_state = IDLE;
+            end  // if (r_frame_length...
+        end  // REMOTE_STD
+          
+        DATA_STD : begin  // waits for all data to be sampled, then goes back to IDLE
+          if (r_frame_length_bits == r_max_bits)
+            begin 
+              r_next_state = IDLE;
+            end  // if (r_frame_length...
+        end  // DATA_STD  
+        
+        RTR_EXT : begin 
+          if (r_frame_length_bits == 32)  // this bit in the extended frame format determines if the frame is data or remote
+            begin  // remote frame
+              if (din)  // See if extended frame is a remote or data frame
+                begin 
+                  r_next_state = REMOTE_EXT;
+                end  // if (din)
+              else   // extended frame is data
+                begin 
+                  r_next_state = DATA_EXT;
+                end  // else    
+            end  // if (r_frame_length...
+        end  // RTR_EXT
+  
+        REMOTE_EXT : begin  // no data in this frame, but still waits for all the bits to go back to IDLE
+          if (r_frame_length_bits == r_max_bits)
+            begin 
+              r_next_state = IDLE;
+            end  // if (r_frame_length...
+        end  // REMOTE_EXT
+          
+        DATA_EXT : begin  // waits for all data to be sampled, then goes back to IDLE
+          if (r_frame_length_bits == r_max_bits)
+            begin 
+              r_next_state = IDLE;
+            end  // if (r_frame_length...
+        end  // DATA_EXT
+        
+        default : begin 
+          r_next_state = IDLE;
+        end  // default
+        
+      endcase
+    end  // always
+                
             
                
               
