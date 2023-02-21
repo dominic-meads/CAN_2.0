@@ -98,7 +98,7 @@ module frame_length_calc #(
     end  // always 
   
   // next state logic
-    always @ (r_present_state, r_frame_length_bits, r_max_bits, sof, r_rtr_ssr)
+  always @ (r_present_state, r_frame_length_bits, r_max_bits, sof, r_rtr_ssr)
     begin 
       case (r_present_state)
         
@@ -190,7 +190,38 @@ module frame_length_calc #(
         
       endcase
     end  // always
+    
+    
+    // output logic 
+    assign sample_en = (r_present_state == IDLE) ? 0 : 1;
+    
+    always @ (posedge clk or negedge rst_n)
+      begin 
+        if (!rst_n)
+          begin 
+            r_max_bits <= 8'hFF;
+          end  // if (!rst_n)
+        else 
+          begin 
+            case (r_present_state)
+              begin 
+                IDLE       : r_max_bits <= 4'hFF;
+                RTR_SSR    : r_max_bits <= 4'hFF;
+                IDE        : r_max_bits <= 4'hFF;
+                STD        : r_max_bits <= 4'hFF;
+                REMOTE_STD : r_max_bits <= 4'H2F;  // 47 bits -- SOF, 12 bit arbitration field, 6 bit control field, No data, 16 bit CRC field, 2 bit ACK field, 7 bits EOF, 3 bits IFS
+                RTR_EXT    : r_max_bits <= 4'hFF;
+                REMOTE_EXT : r_max_bits <= 4'hFF;  // 
+                DATA_EXT   : r_max_bits <= 4'hFF;
+                DATA_STD   : r_max_bits <= 4'hFF;
+                default    : r_max_bits <= 4'hFF;
                 
+        
+        
+        
+    
+    
+    
             
                
               
