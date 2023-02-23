@@ -56,9 +56,12 @@ module frame_length_calc #(
   
   // counter and output registers
   reg [7:0] r_frame_length_bits = 8'h00;
-  reg [7:0] r_max_bits = 8'FF; 
-  reg r_rtr_ssr = 1'b0;  // holds value of rtr bit in standard frame, or ssr bit in extended frame
+  reg [7:0] r_max_bits = 8'FF;
   reg r_sample_en = 1'b0;
+  
+  // sample registers
+  reg r_rtr_ssr = 1'b0;       // holds value of rtr bit in standard frame, or ssr bit in extended frame
+  reg [3:0] r_dlc = 4'b0000;  // holds value of DLC (in control field) 
   
   // up counter
   always @ (posedge clk or negedge rst_n)
@@ -71,7 +74,7 @@ module frame_length_calc #(
         begin 
           if (dvalid)  // only increment when dvalid is high
             begin 
-              if (r_frame_length_bits < r_max_bits)
+                if (r_frame_length_bits < r_max_bits - 1)
                 begin 
                   r_frame_length_bits <= r_frame_length_bits + 1;
                 end  // if (r_frame_length...
@@ -143,14 +146,14 @@ module frame_length_calc #(
         end  // STD
           
         REMOTE_STD : begin  // no data in this frame, but still waits for all the bits to go back to IDLE
-          if (r_frame_length_bits == r_max_bits)
+          if (r_frame_length_bits == r_max_bits - 1)
             begin 
               r_next_state = IDLE;
             end  // if (r_frame_length...
         end  // REMOTE_STD
           
         DATA_STD : begin  // waits for all data to be sampled, then goes back to IDLE
-          if (r_frame_length_bits == r_max_bits)
+          if (r_frame_length_bits == r_max_bits - 1)
             begin 
               r_next_state = IDLE;
             end  // if (r_frame_length...
@@ -171,14 +174,14 @@ module frame_length_calc #(
         end  // RTR_EXT
   
         REMOTE_EXT : begin  // no data in this frame, but still waits for all the bits to go back to IDLE
-          if (r_frame_length_bits == r_max_bits)
+            if (r_frame_length_bits == r_max_bits - 1)
             begin 
               r_next_state = IDLE;
             end  // if (r_frame_length...
         end  // REMOTE_EXT
           
         DATA_EXT : begin  // waits for all data to be sampled, then goes back to IDLE
-          if (r_frame_length_bits == r_max_bits)
+          if (r_frame_length_bits == r_max_bits - 1)
             begin 
               r_next_state = IDLE;
             end  // if (r_frame_length...
@@ -190,6 +193,17 @@ module frame_length_calc #(
         
       endcase
     end  // always
+    
+    // this block registers the DLC field to determine the number of bits in the data frame
+    always @ (posedge clk or negedge rst_n)
+      begin
+        if (!rst_n)
+          begin 
+            r_dlc <= 4'b0000;
+          end  // if (!rst_n)
+        else
+          begin 
+            if (r_present_state == DATA_STD && r_frame_length_bits <= 
     
     
     // output logic 
@@ -209,12 +223,16 @@ module frame_length_calc #(
                 RTR_SSR    : r_max_bits <= 4'hFF;
                 IDE        : r_max_bits <= 4'hFF;
                 STD        : r_max_bits <= 4'hFF;
-                REMOTE_STD : r_max_bits <= 4'H2E;  // 47 bits -- SOF, 12 bit arbitration field, 6 bit control field, No data, 16 bit CRC field, 2 bit ACK field, 7 bits EOF, 3 bits IFS
+                REMOTE_STD : r_max_bits <= 4'H2F;  // 47 bits -- SOF, 12 bit arbitration field, 6 bit control field, No data, 16 bit CRC field, 2 bit ACK field, 7 bits EOF, 3 bits IFS
                 RTR_EXT    : r_max_bits <= 4'hFF;
-                REMOTE_EXT : r_max_bits <= 4'h41;  // 66 bits -- SOF, 31 bit arbitration field, 6 bit control field, no data, 16 bit CRC field, 2 bit ACK field, 7 bits EOF, 3 bits IFS
-                DATA_EXT   : r_max_bits <= 4'hFF;
-                DATA_STD   : r_max_bits <= 4'hFF;
+                REMOTE_EXT : r_max_bits <= 4'h42;  // 66 bits -- SOF, 31 bit arbitration field, 6 bit control field, no data, 16 bit CRC field, 2 bit ACK field, 7 bits EOF, 3 bits IFS
+                DATA_EXT   : r_max_bits <= r_dlc * 8 + 47 ;  // number of bytes of data multipled by 8 bits/byte to get total # of data bits, plus SOF, 12 bit arbitration field, 6 bit control field, 16 bit CRC field, 2 bit ACK field, 7 bits EOF, 3 bits IFS
+                DATA_STD   : r_max_bits <= r_dlc * 8 + 66 ;  // number of bytes of data multipled by 8 bits/byte to get total # of data bits, plus SOF, 31 bit arbitration field, 6 bit control field, 16 bit CRC field, 2 bit ACK field, 7 bits EOF, 3 bits IFS
                 default    : r_max_bits <= 4'hFF;
+              end  // case
+            endcase
+          end  // else
+      end  // always
                 
         
         
