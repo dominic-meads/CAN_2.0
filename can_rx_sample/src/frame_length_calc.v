@@ -209,9 +209,9 @@ module frame_length_calc #(
                 RTR_SSR    : r_max_bits <= 4'hFF;
                 IDE        : r_max_bits <= 4'hFF;
                 STD        : r_max_bits <= 4'hFF;
-                REMOTE_STD : r_max_bits <= 4'H2F;  // 47 bits -- SOF, 12 bit arbitration field, 6 bit control field, No data, 16 bit CRC field, 2 bit ACK field, 7 bits EOF, 3 bits IFS
+                REMOTE_STD : r_max_bits <= 4'H2E;  // 47 bits -- SOF, 12 bit arbitration field, 6 bit control field, No data, 16 bit CRC field, 2 bit ACK field, 7 bits EOF, 3 bits IFS
                 RTR_EXT    : r_max_bits <= 4'hFF;
-                REMOTE_EXT : r_max_bits <= 4'hFF;  // 
+                REMOTE_EXT : r_max_bits <= 4'h41;  // 66 bits -- SOF, 31 bit arbitration field, 6 bit control field, no data, 16 bit CRC field, 2 bit ACK field, 7 bits EOF, 3 bits IFS
                 DATA_EXT   : r_max_bits <= 4'hFF;
                 DATA_STD   : r_max_bits <= 4'hFF;
                 default    : r_max_bits <= 4'hFF;
